@@ -27,6 +27,9 @@ void computerBrains() {
     // create computer brains
 }
 
+void cardDeck() {
+    // create card deck
+}
 
 
 
