@@ -4,14 +4,27 @@ using namespace std;
 
 void Play() {
     cout << "Play" << endl;
+    // takes user name
+    // at the end writes name and score to leaderboard
+
 }
 
 void Rules() {
     cout << "Rules" << endl;
+
+    // describe rules of the game
+    // and small description how to play
 }
 
 void Leaderboard() {
     cout << "Leaderboard" << endl;
+
+    // opens leaderboard.txt file
+    // reads only first 5 or 10 records
+}
+
+void computerBrains() {
+    // create computer brains
 }
 
 
