@@ -14,6 +14,7 @@ void Rules() {
 
     // describe rules of the game
     // and small description how to play
+    
 }
 
 void Leaderboard() {
@@ -21,6 +22,7 @@ void Leaderboard() {
 
     // opens leaderboard.txt file
     // reads only first 5 or 10 records
+    // use <fstream> ?????
 }
 
 void computerBrains() {
