@@ -1,10 +1,17 @@
 #include <iostream>
-#include <conio.h> // Required for windows to catch user input
+
 using namespace std;
 
 void Play() {
     cout << "Play" << endl;
-    // takes user name
+    
+// takes user name
+  string Username;
+  cout << "Enter your username:  ";
+  cin>>Username; 
+  cout << "Your username is: " << Username << endl;
+
+
     // at the end writes name and score to leaderboard
 
 }
@@ -54,7 +61,7 @@ int main() {
         cout << " 4 - Exit" << endl;
         cout << " " << endl;
 
-        choice = _getch(); //take user input
+         cin>>choice; 
 
         switch(choice) {
             case '1':
