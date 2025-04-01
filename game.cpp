@@ -13,7 +13,13 @@ void Rules() {
     cout << "Rules" << endl;
 
     // describe rules of the game
-    // and small description how to play
+    
+    cout << "1. (GAMEPLAY.)" << endl; 
+    cout << "2. Players take turns drawing 1 card from deck." << endl; 
+    cout << "3. You may also swap a card (Max of three cards.)" << endl; 
+    cout << "4. A player can knock end of round when they believe they have the highest hand." << endl; 
+    cout << "5. Everyone gets one last turn after a knock." << endl; 
+    cout << "6. If a player has 31 they must say immedietly and the round ends."  << endl; 
     
 }
 
