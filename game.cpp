@@ -7,57 +7,54 @@
 
 using namespace std;
 
-// Function to generate card deck
 vector<string> createDeck() {
-    vector<string> cards = {
-        "AC", "AD", "AH", "AS",
-        "KC", "KD", "KH", "KS",
-        "QC", "QD", "QH", "QS",
-        "JC", "JD", "JH", "JS",
-        "10C", "10D", "10H", "10S",
-        "9C", "9D", "9H", "9S",
-        "8C", "8D", "8H", "8S",
-        "7C", "7D", "7H", "7S",
-        "6C", "6D", "6H", "6S",
-        "5C", "5D", "5H", "5S",
-        "4C", "4D", "4H", "4S",
-        "3C", "3D", "3H", "3S",
-        "2C", "2D", "2H", "2S"
-    };
+    vector<string> cards;
+    string suits[] = {"C", "D", "H", "S"};
+    string ranks[] = {"A", "K", "Q", "J", "10", "9", "8", "7", "6", "5", "4", "3", "2"};
+
+    for (int i = 0; i < 4; ++i) {
+        for (int j = 0; j < 13; ++j) {
+            cards.push_back(ranks[j] + suits[i]);
+        }
+    }
     random_device rd;
     mt19937 g(rd());
     shuffle(cards.begin(), cards.end(), g);
     return cards;
 }
 
-// Get card value (simplified for now)
 int getCardValue(const string& card) {
-    if (card.substr(0, 2) == "10") return 10;
+    if (card.substr(0, 2) == "10") {
+        return 10;
+    }
     char rank = card[0];
-    if (rank == 'A') return 11;
-    if (rank == 'K' || rank == 'Q' || rank == 'J') return 10;
+    if (rank == 'A') {
+        return 11;
+    }
+    if (rank == 'K' || rank == 'Q' || rank == 'J') {
+        return 10;
+    }
     return rank - '0';
 }
 
-// Get hand cards score
 int getHandScore(const vector<string>& hand) {
     int score = 0;
-    for (const auto& card : hand) {
-        score += getCardValue(card);
+    for (int i = 0; i < hand.size(); ++i) {
+        score += getCardValue(hand[i]);
     }
     return score;
 }
 
-// Swap card function
 void swapCard(vector<string>& hand, string& tableCard, const string& newCard, int index) {
     tableCard = hand[index];
     hand[index] = newCard;
 }
 
-// Player's turn
 bool playerTurn(vector<string>& hand, string& tableCard, vector<string>& deck) {
     cout << "\nYour hand: ";
-    for (int i = 0; i < 3; ++i) cout << "[" << i + 1 << "] " << hand[i] << "  ";
+    for (int i = 0; i < 3; ++i) {
+        cout << "[" << i + 1 << "] " << hand[i] << "  ";
+    }
     cout << "\nTable card: " << tableCard << endl;
 
     cout << "Draw from (1) Deck or (2) Table? ";
@@ -83,7 +80,6 @@ bool playerTurn(vector<string>& hand, string& tableCard, vector<string>& deck) {
     if (replace >= 1 && replace <= 3) {
         swapCard(hand, tableCard, drawnCard, replace - 1);
     } else {
-        // If kept hand, discard the drawn card to table
         tableCard = drawnCard;
     }
 
@@ -101,7 +97,6 @@ bool playerTurn(vector<string>& hand, string& tableCard, vector<string>& deck) {
     return (knock == 'y' || knock == 'Y');
 }
 
-// Computer's turn (simple logic)
 bool computerTurn(vector<string>& hand, string& tableCard, vector<string>& deck) {
     int minIndex = 0;
     int minVal = getCardValue(hand[0]);
@@ -128,20 +123,19 @@ bool computerTurn(vector<string>& hand, string& tableCard, vector<string>& deck)
 
     int score = getHandScore(hand);
     cout << "Computer's turn. Score: " << score << endl;
-    return (score >= 27); // Knock if 27+
+    return (score >= 27);
 }
 
-// Game function
 void Play() {
     string username;
     cout << "Enter your username: ";
     cin >> username;
 
     vector<string> deck = createDeck();
-    vector<string> playerHand, computerHand;
+    vector<string> playerHand;
+    vector<string> computerHand;
     string tableCard;
 
-    // Deal 3 cards to each
     for (int i = 0; i < 3; ++i) {
         computerHand.push_back(deck.back());
         deck.pop_back();
@@ -156,7 +150,6 @@ void Play() {
     bool computerKnocked = false;
 
     while (!gameOver) {
-        // Refill deck from table if deck is empty
         if (deck.empty()) {
             deck.push_back(tableCard);
             random_shuffle(deck.begin(), deck.end());
@@ -194,12 +187,13 @@ void Play() {
     cout << username << ": " << playerScore << endl;
     cout << "Computer: " << computerScore << endl;
 
-    if (playerScore > computerScore)
+    if (playerScore > computerScore) {
         cout << username << " wins!\n";
-    else if (computerScore > playerScore)
+    } else if (computerScore > playerScore) {
         cout << "Computer wins!\n";
-    else
+    } else {
         cout << "It's a tie!\n";
+    }
 
     ofstream out("leaderboard.txt", ios::app);
     if (out) {
@@ -240,11 +234,19 @@ int main() {
         cin >> choice;
 
         switch (choice) {
-            case '1': Play(); break;
-            case '2': Rules(); break;
-            case '3': Leaderboard(); break;
-            case '4': return 0;
-            default: cout << "Invalid choice.\n";
+            case '1':
+                Play();
+                break;
+            case '2':
+                Rules();
+                break;
+            case '3':
+                Leaderboard();
+                break;
+            case '4':
+                return 0;
+            default:
+                cout << "Invalid choice.\n";
         }
     }
     return 0;
