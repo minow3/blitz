@@ -102,9 +102,6 @@ int main() {
         "2C", "2D", "2H", "2S"
     };
 
-    shuffleDeck(cards);
-    dealCards(cards);
-
     while(true) {
         cout << "Let's play Blitz" << endl;
         cout << " " << endl;
@@ -119,6 +116,10 @@ int main() {
         switch(choice) {
             case '1':
                 Play();
+                //Shuffle cards
+                shuffleDeck(cards);
+                //deal cards
+                dealCards(cards);
                 break;
             case '2':
                 Rules();
