@@ -87,10 +87,19 @@ void Rules() {
 
 void Leaderboard() {
     cout << "Leaderboard" << endl;
+    ifstream file("leaderboard.txt");
+    if (!file) {
+        cout << "No leaderboard found." << endl;
+        return;
+    }
 
-    // opens leaderboard.txt file
-    // reads only first 5 or 10 records
-    // use <fstream> ?????
+    string line;
+    int count = 0;
+    while (getline(file, line) && count < 10) {
+        cout << line << endl;
+        count++;
+    }
+    file.close();
 }
 
 void computerBrains() {
