@@ -19,7 +19,7 @@ vector<string> createDeck() {
     }
     random_device rd;
     mt19937 g(rd());
-    shuffle(cards.begin(), cards.end(), g); // Sorts vector <cards>
+    shuffle(cards.begin(), cards.end(), g);
     return cards;
 }
 
@@ -156,7 +156,6 @@ void Play() {
             mt19937 g(rd());
             shuffle(deck.begin(), deck.end(), g);
         }
-        
 
         computerKnocked = computerTurn(computerHand, tableCard, deck);
         if (getHandScore(computerHand) == 31) {
@@ -200,7 +199,7 @@ void Play() {
 
     ofstream out("leaderboard.txt", ios::app);
     if (out) {
-        out << username << " - " << playerScore << " points\n";
+        out << username << " - " << playerScore << "\n";
         out.close();
     }
 }
@@ -216,16 +215,39 @@ void Rules() {
 
 void Leaderboard() {
     ifstream in("leaderboard.txt");
-    cout << "\n--- Leaderboard ---\n";
     if (!in) {
-        cout << "No scores recorded yet.\n";
-        return;
+        ofstream out("leaderboard.txt");
+        vector<string> sampleNames = {"Alex", "Jamie", "Sam", "Taylor", "Jordan", "Riley", "Casey"};
+        random_device rd;
+        mt19937 gen(rd());
+        uniform_int_distribution<> dist(18, 27);
+
+        for (int i = 0; i < 7; ++i) {
+            int score = dist(gen);
+            out << sampleNames[i] << " - " << score << "\n";
+        }
+        out.close();
     }
-    string line;
-    while (getline(in, line)) {
-        cout << line << endl;
+
+    in.close();
+    in.open("leaderboard.txt");
+
+    vector<pair<string, int>> entries;
+    string name;
+    int score;
+    while (in >> name >> ws && in.ignore(3, '-') && in >> score) {
+        entries.push_back(make_pair(name, score));
     }
     in.close();
+
+    sort(entries.begin(), entries.end(), [](const pair<string, int>& a, const pair<string, int>& b) {
+        return b.second < a.second;
+    });
+
+    cout << "\n--- Leaderboard (Top 10) ---\n";
+    for (int i = 0; i < entries.size() && i < 10; ++i) {
+        cout << entries[i].first << " - " << entries[i].second << endl;
+    }
     cout << endl;
 }
 
