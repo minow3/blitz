@@ -1,9 +1,9 @@
-#include <iostream>
-#include <vector>
-#include <random>
-#include <algorithm>
-#include <fstream>
-#include <ctime>
+#include <iostream> //Handles input/output
+#include <vector> //Creates dinamic arrays
+#include <random> //Lets to use random numbers
+#include <algorithm> //Algorithmic functions
+#include <fstream> //File handling, lets read and write
+#include <ctime> //Gives acces to time and date
 
 using namespace std;
 
@@ -19,7 +19,7 @@ vector<string> createDeck() {
     }
     random_device rd;
     mt19937 g(rd());
-    shuffle(cards.begin(), cards.end(), g);
+    shuffle(cards.begin(), cards.end(), g); // Sorts vector <cards>
     return cards;
 }
 
@@ -152,8 +152,11 @@ void Play() {
     while (!gameOver) {
         if (deck.empty()) {
             deck.push_back(tableCard);
-            random_shuffle(deck.begin(), deck.end());
+            random_device rd;
+            mt19937 g(rd());
+            shuffle(deck.begin(), deck.end(), g);
         }
+        
 
         computerKnocked = computerTurn(computerHand, tableCard, deck);
         if (getHandScore(computerHand) == 31) {
