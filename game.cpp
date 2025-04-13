@@ -334,22 +334,23 @@ void Play()
             {
                 playerKnocked = playerTurn(playerHand, tableCard, deck); // player turn
 
-                if (getHandScore(playerHand) == 31)
+                if (getHandScore(playerHand) == 31) // if player hits 31
                 {
                     cout << player << " hit 31! You win instantly!\n";
-                    ofstream out("leaderboard.txt", ios::app);
+                    ofstream out("leaderboard.txt", ios::app); // write to leaderboard
                     out << player << " - WIN\n";
                     out.close();
                     return;
                 }
 
+                // Player decision to knock and gives one last turn for the computer (opponents)
                 if (playerKnocked)
                 {
                     cout << player << " knocked! Opponents get one last turn.\n";
 
-                    for (int i = 0; i < opponents; ++i)
+                    for (int i = 0; i < opponents; ++i) // gives all opponents one last turn
                     {
-                        computerKnocked[i] = computerTurn(computerHands[i], tableCard, deck);
+                        computerKnocked[i] = computerTurn(computerHands[i], tableCard, deck); //opponent turn
                     }
                     gameOver = true;
                 }
@@ -357,37 +358,51 @@ void Play()
         }
 
         // Final Scoring
-        int playerScore = getHandScore(playerHand);
-        vector<int> compScores(opponents);
-        int maxScore = playerScore;
+        int playerScore = getHandScore(playerHand); // player score
+        vector<int> compScores(opponents); // computer scores
+        int maxScore = playerScore; // max score
         int winner = -1; // -1 for player, 0+ for computer[i]
 
-        for (int i = 0; i < opponents; ++i) {
-            compScores[i] = getHandScore(computerHands[i]);
-            if (compScores[i] > maxScore) {
-                maxScore = compScores[i];
+        for (int i = 0; i < opponents; ++i) // loops each opponent scores
+        {
+            compScores[i] = getHandScore(computerHands[i]); // gets computer score
+
+            if (compScores[i] > maxScore) // if computer score is bigger
+            {
+                maxScore = compScores[i]; // becomes max score
                 winner = i;
             }
         }
 
+        // Displaying final scores
         cout << "\n\tFinal Scores:\n";
         cout << player << ": " << playerScore << endl;
-        for (int i = 0; i < opponents; ++i) {
+
+        for (int i = 0; i < opponents; ++i) // loops each opponent and shows score
+        {
             cout << "\tOpponent " << (i + 1) << ": " << compScores[i] << endl;
         }
 
-        if (winner == -1) {
+        // Displaying Player winner
+        if (winner == -1)
+        {
             cout << player << " wins!\n";
-            ofstream out("leaderboard.txt", ios::app);
+            ofstream out("leaderboard.txt", ios::app); // write to leaderboard
             out << player << " - WIN\n";
             out.close();
-        } else {
+
+        }
+
+        // Displaying computer winner
+        else
+        {
             cout << "\tOpponent " << (winner + 1) << " wins!\n";
-            ofstream out("leaderboard.txt", ios::app);
+            ofstream out("leaderboard.txt", ios::app); // write to leaderboard
             out << player << " - LOSS\n";
             out.close();
         }
 
+        // Ask player if they want to play again
         cout << "\n\tDo you want to play again? (y/n): ";
         char again;
         cin >> again;
