@@ -108,85 +108,129 @@ void swapCard(vector<string>& hand, string& tableCard, string drawnCard, int ind
     hand[index] = drawnCard; // drawn card (table, deck) goes to hand
 }
 
-
-bool playerTurn(vector<string>& hand, string& tableCard, vector<string>& deck) {
+// ##### PLAYER TURN #####
+// Controls player turn, player can swap cards from deck or table, shows score and lets knock
+bool playerTurn(vector<string>& hand, string& tableCard, vector<string>& deck)
+{
+    //Prints cards are at hand
     cout << "\n\tYour hand: ";
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 3; ++i)
+    {
         cout << "[" << i + 1 << "] " << hand[i] << "  ";
     }
 
     // Show current score BEFORE making a move
     int currentScore = getHandScore(hand);
-    cout << "\n\tCurrent score: " << currentScore;
+    cout << "\n\tCurrent score: " << currentScore; // current score
 
-    cout << "\n\tTable card: " << tableCard << endl;
+    cout << "\n\tTable card: " << tableCard << endl; // Shows last card on table
 
-
+    // Player move to take card from deck or table
     cout << "\tDraw from (1) Deck or (2) Table? ";
     int choice;
     cin >> choice;
 
+    // Player takes card from deck
     string drawnCard;
-    if (choice == 1 && !deck.empty()) {
-        drawnCard = deck.back();
-        deck.pop_back();
-    } else if (choice == 2) {
-        drawnCard = tableCard;
-    } else {
+    if (choice == 1 && !deck.empty()) // if deck is not empty
+    {
+        drawnCard = deck.back(); //top card
+        deck.pop_back(); //removes card
+    }
+
+    // Player takes card from table
+    else if (choice == 2)
+    {
+        drawnCard = tableCard; //table card
+    }
+    else
+    {
         cout << "\tInvalid choice or empty deck. Skipping turn.\n";
         return false;
     }
 
+    // Displays card player took
     cout << "\tYou drew: " << drawnCard << endl;
+
+    // Selecting card to replace
     cout << "\tWhich card to replace (1-3)? or 0 to keep your hand: ";
     int replace;
     cin >> replace;
 
-    if (replace >= 1 && replace <= 3) {
-        swapCard(hand, tableCard, drawnCard, replace - 1);
-    } else {
-        tableCard = drawnCard;
+    if (replace >= 1 && replace <= 3)
+    {
+        swapCard(hand, tableCard, drawnCard, replace - 1); //swaps card
+    }
+    else
+    {
+        tableCard = drawnCard; // card becomes table card
     }
 
+    // Show current score
     int score = getHandScore(hand);
     cout << "\tYour current score: " << score << endl;
 
-    if (score == 31) {
+    // Check if player hit 31
+    if (score == 31)
+    {
         cout << "\tYou hit 31! You win instantly!\n";
         return true;
     }
 
+    // Check if player wants to knock
     cout << "\tDo you want to knock? (y/n): ";
     char knock;
     cin >> knock;
     return (knock == 'y' || knock == 'Y');
 }
 
-bool computerTurn(vector<string>& hand, string& tableCard, vector<string>& deck) {
+// ##### COMPUTER TURN #####
+// Simulates computer turn (Opponent), acts like player, knocking score starts from 27
+bool computerTurn(vector<string>& hand, string& tableCard, vector<string>& deck)
+{
     int minIndex = 0;
-    int minVal = getCardValue(hand[0]);
-    for (int i = 1; i < 3; ++i) {
-        if (getCardValue(hand[i]) < minVal) {
-            minVal = getCardValue(hand[i]);
+    int minVal = getCardValue(hand[0]); //Stores min value card
+
+    // Find the card with the lowest value
+    for (int i = 1; i < 3; ++i)
+    {
+        if (getCardValue(hand[i]) < minVal)
+        {
+            minVal = getCardValue(hand[i]); 
             minIndex = i;
         }
     }
-
+    
+    // Computer draws card from deck
     string drawnCard;
-    if (!deck.empty()) {
-        drawnCard = deck.back();
-        deck.pop_back();
-    } else {
-        drawnCard = tableCard;
+    if (!deck.empty()) //if not empty
+    {
+        drawnCard = deck.back(); //takes top card
+        deck.pop_back(); //removes
     }
 
-    if (getCardValue(drawnCard) > minVal) {
-        swapCard(hand, tableCard, drawnCard, minIndex);
-    } else {
-        tableCard = drawnCard;
+    // Computer draws card from table
+    else
+    {
+        drawnCard = tableCard; //table card goes into hand
     }
 
+    // Swaps card if value is higher then min value card on hand
+    if (getCardValue(drawnCard) > minVal)
+    {
+        swapCard(hand, tableCard, drawnCard, minIndex); //swaping
+    }
+
+    // Computers puts card to table if value worst
+    else
+    {
+        tableCard = drawnCard; // card goes to table
+    }
+
+    //Saves computer score
     int score = getHandScore(hand);
+
+    // Tells player computer turn is done
     cout << "\tOpponent turn done...\n" << endl;
     return (score >= 27);
 }
@@ -368,7 +412,7 @@ int main()
         cout << "\n\tEnter: ";
         cin >> choice;
         
-        switch(choice)
+        switch(choice) // Selects menu
         {
             case '1':
                 Play();
