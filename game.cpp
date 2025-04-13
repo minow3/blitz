@@ -235,6 +235,10 @@ bool computerTurn(vector<string>& hand, string& tableCard, vector<string>& deck)
     return (score >= 27);
 }
 
+// ##### PLAY #####
+// Hole action happens here, starting with user name, then prompting select count of opponents
+// Initiating deck, player and computer hands, giving turns to player and computer
+// Calculating final scores and giving option to play again
 void Play()
 {
     string player;
@@ -243,80 +247,108 @@ void Play()
     cout << "\n\t=== Blitz ===\n\n";
     cout << "\tWhat's your name?\n";
     cout << "\tEnter: ";
-    cin >> player;
+    cin >> player; // Asking for name
 
-    do {
+    // Creates small loop provide count of opponents
+    do
+    {
         cout << "\n\tGame can be played with 1-3 opponents.\n";
         cout << "\tSelect number of opponents: ";
         cin >> opponents;
 
         if (opponents < 1 || opponents > 3)
+        {
             cout << "\n\tPlease enter a valid number between 1 and 3.\n";
-    } while (opponents < 1 || opponents > 3);
+        }
 
-    bool playAgain = false;
+    } while (opponents < 1 || opponents > 3); //loop continues until number 1, 2, 3 not selected
 
+    bool playAgain = false; // Controling loop (repeat point)
+
+    // Main game loop
     do {
-        vector<string> deck = createDeck();
-        vector<string> playerHand;
+        vector<string> deck = createDeck(); // creating deck
+        vector<string> playerHand; // player hand
         vector<vector<string>> computerHands(opponents); // multiple opponents
         string tableCard;
 
-        for (int i = 0; i < 3; ++i) {
-            playerHand.push_back(deck.back());
-            deck.pop_back();
-            for (int j = 0; j < opponents; ++j) {
-                computerHands[j].push_back(deck.back());
-                deck.pop_back();
+        // Deal 3 cards to player and computer cards
+        for (int i = 0; i < 3; ++i)
+        {
+            playerHand.push_back(deck.back()); //takes cards from back of the deck
+            deck.pop_back(); //removes the cards from deck
+
+            for (int j = 0; j < opponents; ++j) //gives 3 cards to each computer
+            {
+                computerHands[j].push_back(deck.back()); // takes from back of the deck
+                deck.pop_back(); //removes the cards from deck
             }
         }
 
-        tableCard = deck.back();
-        deck.pop_back();
+        // Sets the top card as the table first card
+        tableCard = deck.back(); //takes from deck
+        deck.pop_back(); // and removes from deck
 
-        bool gameOver = false;
-        bool playerKnocked = false;
-        vector<bool> computerKnocked(opponents, false);
+        // Tracks game evolvement
+        bool gameOver = false; // Checks for game over
+        bool playerKnocked = false; // Checks if player knocked
+        vector<bool> computerKnocked(opponents, false); // Checks if any computer knocked
 
-        while (!gameOver) {
-            if (deck.empty()) {
-                deck.push_back(tableCard);
+        // Loop for continuity, if deck is empty takes all remaining cards from table, shuffles
+        while (!gameOver)
+        {
+            if (deck.empty())
+            {
+                deck.push_back(tableCard); //Pushes table card to deck
                 random_device rd;
-                mt19937 g(rd());
-                shuffle(deck.begin(), deck.end(), g);
+                mt19937 random(rd());
+                shuffle(deck.begin(), deck.end(), random); //shuffles deck using mt19937
             }
 
             // Computer turns
-            for (int i = 0; i < opponents; ++i) {
+            for (int i = 0; i < opponents; ++i) // each computer takes turn
+            {
                 computerKnocked[i] = computerTurn(computerHands[i], tableCard, deck);
-                if (getHandScore(computerHands[i]) == 31) {
+
+                if (getHandScore(computerHands[i]) == 31) // if computer hits 31
+                {
                     cout << "\tOpponent " << (i + 1) << " hit 31! They win!\n";
-                    ofstream out("leaderboard.txt", ios::app);
-                    out << player << " - LOSS\n";
+                    ofstream out("leaderboard.txt", ios::app); // write to leaderboard
+                    out << player << " - LOSS\n"; // player loses
                     out.close();
                     return;
                 }
-                if (computerKnocked[i]) {
+
+                // Computer knocks if score are bigger then 26 gives one last turn for the player
+                if (computerKnocked[i])
+                {
                     cout << "\tOpponent " << (i + 1) << " knocks! You get one last turn.\n";
-                    playerKnocked = playerTurn(playerHand, tableCard, deck);
-                    gameOver = true;
+                    playerKnocked = playerTurn(playerHand, tableCard, deck); // player turn
+                    gameOver = true; // Close the game
                     break;
                 }
             }
 
             // Player turn
-            if (!gameOver) {
-                playerKnocked = playerTurn(playerHand, tableCard, deck);
-                if (getHandScore(playerHand) == 31) {
+            if (!gameOver) // If game continues
+            {
+                playerKnocked = playerTurn(playerHand, tableCard, deck); // player turn
+
+                if (getHandScore(playerHand) == 31)
+                {
                     cout << player << " hit 31! You win instantly!\n";
                     ofstream out("leaderboard.txt", ios::app);
                     out << player << " - WIN\n";
                     out.close();
                     return;
                 }
-                if (playerKnocked) {
+
+                if (playerKnocked)
+                {
                     cout << player << " knocked! Opponents get one last turn.\n";
-                    for (int i = 0; i < opponents; ++i) {
+
+                    for (int i = 0; i < opponents; ++i)
+                    {
                         computerKnocked[i] = computerTurn(computerHands[i], tableCard, deck);
                     }
                     gameOver = true;
