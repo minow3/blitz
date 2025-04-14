@@ -1,5 +1,5 @@
 // Team: Blitz
-// Members: Tomas, Micheal, William, Archie
+// Members: Tomas, Micheal, William, Archi
 // Function: Recreating card game known by the name blitz or 31
 // Goals: 1. Game has to be playable. 2. Player can select multiple opponents. 3.Include some advance features
 // Advance features:
