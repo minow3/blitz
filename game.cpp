@@ -18,6 +18,7 @@
 #include <fstream> //File handling, lets read and write
 
 using namespace std;
+int gamesPlayed = 0; 
 
 // ##### DECK OF CARDS #####
 vector<string> createDeck()
@@ -55,6 +56,27 @@ vector<string> dealCards(vector<string>& deck, int numCards)
 char getSuit(const string& card)
 {
     return card.back();
+}
+
+// ##### DISPLAY CARD #####
+// Visual representation of a card using ASCII art
+void displayCard(const string& card) {
+    string rank = card.substr(0, card.size() - 1); // Extract rank
+    char suit = card.back(); // Extract suit
+
+    string suitSymbol;
+    switch (suit) {
+        case 'C': suitSymbol = "♣"; break; // Clubs
+        case 'D': suitSymbol = "♦"; break; // Diamonds
+        case 'H': suitSymbol = "♥"; break; // Hearts
+        case 'S': suitSymbol = "♠"; break; // Spades
+    }
+
+    cout << "┌───────┐\n";
+    cout << "│ " << rank << string(2 - rank.size(), ' ') << "    │\n"; // Rank
+    cout << "│   " << suitSymbol << "   │\n"; // Suit
+    cout << "│    " << rank << string(2 - rank.size(), ' ') << " │\n";
+    cout << "└───────┘\n";
 }
 
 // ##### POINTS CALCULATION #####
@@ -149,8 +171,9 @@ bool playerTurn(vector<string>& hand, string& tableCard, vector<string>& deck)
         return false;
     }
 
-    // Displays card player took
-    cout << "\tYou drew: " << drawnCard << endl;
+     // Displays card player took
+    cout << "\tYou drew:\n";
+    displayCard(drawnCard);
 
     // Selecting card to replace
     cout << "\tWhich card to replace (1-3)? or 0 to keep your hand: ";
@@ -241,6 +264,7 @@ bool computerTurn(vector<string>& hand, string& tableCard, vector<string>& deck)
 // Calculating final scores and giving option to play again
 void Play()
 {
+     gamesPlayed++; // Increment the counter
     string player;
     int opponents = 0;
 
@@ -462,6 +486,7 @@ int main()
         cout << "\t2. Rules\n";
         cout << "\t3. Leaderboard\n";
         cout << "\t4. Exit\n";
+        cout << "\n\tGames played this session: " << gamesPlayed << "\n";
         cout << "\n\tEnter: ";
         
         if (!(cin >> choice)) {
