@@ -386,6 +386,12 @@ void Play()
         // Displaying Player winner
         if (winner == -1)
         {
+
+//Logic for if there is a tie...
+ if (playerScore == maxScore) {
+                cout << "\n\tIt's a tie! The last knocker wins.\n";
+            }
+
             cout << player << " wins!\n";
             ofstream out("leaderboard.txt", ios::app); // write to leaderboard
             out << player << " - WIN\n";
@@ -457,7 +463,15 @@ int main()
         cout << "\t3. Leaderboard\n";
         cout << "\t4. Exit\n";
         cout << "\n\tEnter: ";
-        cin >> choice;
+        
+        if (!(cin >> choice)) {
+            cin.clear(); // Clear the error flag
+            cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Discard invalid input
+            cout << "\n\tInvalid input. Please enter a number.\n";
+            continue;
+        }
+
+// ^ Logic for handling invalid player input in menu.
         
         switch(choice) // Selects menu
         {
